@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const anggotaRoutes = require('./routes/anggotaRoutes');
-const errorHandler = require('./middlewares/errorMiddleware');
+const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
