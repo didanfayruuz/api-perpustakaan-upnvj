@@ -3,17 +3,17 @@ const { anggotaTable } = require('../models/schema');
 const { eq } = require('drizzle-orm');
 
 // 1. Get All Anggota
-exports.getAllAnggota = async (req, res) => {
+exports.getAllAnggota = async (req, res, next) => {
     try {
         const anggotaList = await db.select().from(anggotaTable);
         res.status(200).json({ success: true, data: anggotaList });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error); 
     }
 };
 
 // 2. Get Anggota By ID
-exports.getAnggotaById = async (req, res) => {
+exports.getAnggotaById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const [anggota] = await db.select().from(anggotaTable).where(eq(anggotaTable.id, Number(id)));
@@ -24,12 +24,12 @@ exports.getAnggotaById = async (req, res) => {
 
         res.status(200).json({ success: true, data: anggota });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error); 
     }
 };
 
 // 3. Add / Create Anggota
-exports.addAnggota = async (req, res) => {
+exports.addAnggota = async (req, res, next) => {
     try {
         const { nama, nim, umur, jurusan } = req.body || {};
 
@@ -46,14 +46,14 @@ exports.addAnggota = async (req, res) => {
         if (error.code === '23505') {
             return res.status(400).json({ success: false, message: "NIM sudah terdaftar!" });
         }
-        res.status(500).json({ success: false, message: error.message });
+        next(error); 
     }
 };
 
 exports.createAnggota = exports.addAnggota;
 
 // 4. Update Anggota
-exports.updateAnggota = async (req, res) => {
+exports.updateAnggota = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { nama, nim, umur, jurusan } = req.body || {};
@@ -78,12 +78,12 @@ exports.updateAnggota = async (req, res) => {
         if (error.code === '23505') {
             return res.status(400).json({ success: false, message: "NIM sudah digunakan oleh anggota lain!" });
         }
-        res.status(500).json({ success: false, message: error.message });
+        next(error); 
     }
 };
 
 // 5. Delete Anggota
-exports.deleteAnggota = async (req, res) => {
+exports.deleteAnggota = async (req, res, next) => {
     try {
         const { id } = req.params;
         const [existing] = await db.select().from(anggotaTable).where(eq(anggotaTable.id, Number(id)));
@@ -95,6 +95,6 @@ exports.deleteAnggota = async (req, res) => {
 
         res.status(200).json({ success: true, message: "Anggota berhasil dihapus!" });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        next(error); 
     }
 };
