@@ -15,6 +15,15 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Endpoint root / health check
+app.get('/', (req, res) => {
+res.status(200).json({
+success: true,
+message: "API Perpustakaan UPNVJ berjalan dengan baik di Vercel!",
+version: "1.0.0"
+    });
+});
+
 // Mounting Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/anggota', anggotaRoutes);
